@@ -22,9 +22,8 @@ struct ContentView: View {
                             Text("Camera")
                         }
                         .sheet(isPresented: $isShowingEditView) {
-                            // Present your Image Edit View here
-                            ImageEditViewWrapper(image: $capturedImage)
-                        }
+                                    ImageEditViewWrapper(image: $capturedImage, isShowingEditView: $isShowingEditView)  // Pass the binding here
+                                }
 
             SavedDesignsView()
                 .tabItem {
@@ -36,19 +35,36 @@ struct ContentView: View {
 }
 struct ImageEditViewWrapper: UIViewControllerRepresentable {
     @Binding var image: UIImage?
+    @Binding var isShowingEditView: Bool  // Bind to the state controlling the sheet presentation
+
+    func makeCoordinator() -> Coordinator {
+        Coordinator(self)
+    }
+
+    class Coordinator: NSObject, ImageEditViewControllerDelegate {
+        var parent: ImageEditViewWrapper
+
+        init(_ parent: ImageEditViewWrapper) {
+            self.parent = parent
+        }
+
+        func didRequestRetake() {
+            parent.isShowingEditView = false  // This will dismiss the sheet when the user requests a retake
+        }
+    }
 
     func makeUIViewController(context: Context) -> ImageEditViewController {
         let imageEditViewController = ImageEditViewController()
-        // Assign the image from the binding to the view controller's property
         imageEditViewController.originalImage = self.image
+        imageEditViewController.delegate = context.coordinator  // Set the delegate
         return imageEditViewController
     }
 
     func updateUIViewController(_ uiViewController: ImageEditViewController, context: Context) {
-        // If the bound image changes, update the view controller's property
         uiViewController.originalImage = self.image
     }
 }
+
 
 
 struct ContentView_Previews: PreviewProvider {

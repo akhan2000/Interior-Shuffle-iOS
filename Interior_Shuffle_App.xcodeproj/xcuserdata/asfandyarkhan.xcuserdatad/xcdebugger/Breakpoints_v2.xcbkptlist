@@ -49,6 +49,21 @@
                   endingLineNumber = "76"
                   offsetFromSymbolStart = "548">
                </Location>
+               <Location
+                  uuid = "15752F29-DC24-4565-8429-80C316F10881 - db41159b82b0a0bb"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Interior_Shuffle_App.checkCameraAuthorization(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
+                  moduleName = "Interior_Shuffle_App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/asfandyarkhan/Desktop/Interior-Shuffle-Xcode-Repo/Interior-Shuffle-iOS/Interior_Shuffle_App/controllers/CameraController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "548">
+               </Location>
             </Locations>
          </BreakpointContent>
       </BreakpointProxy>

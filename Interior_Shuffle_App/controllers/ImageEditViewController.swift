@@ -1,54 +1,34 @@
 import UIKit
 
+// Define the delegate protocol
+protocol ImageEditViewControllerDelegate: AnyObject {
+    func didRequestRetake()
+}
+
 class ImageEditViewController: UIViewController {
 
-    var imageView: UIImageView!
+    var eraserView: EraserView!
     var originalImage: UIImage?
+    weak var delegate: ImageEditViewControllerDelegate?
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
+        eraserView = EraserView(frame: self.view.bounds, image: originalImage)
+        view.addSubview(eraserView)
 
-        imageView = UIImageView(frame: self.view.bounds)
-        imageView.contentMode = .scaleAspectFit
-        imageView.isUserInteractionEnabled = true
-        view.addSubview(imageView)
-
-        let tapGestureRecognizer = UITapGestureRecognizer(target: self, action: #selector(imageTapped(tapGestureRecognizer:)))
-        imageView.addGestureRecognizer(tapGestureRecognizer)
-
-        // Ensure the original image is loaded before assigning it to imageView
+        // Ensure the original image is loaded before assigning it to EraserView
         if let originalImage = originalImage {
-            imageView.image = originalImage
+            eraserView.currentImage = originalImage
         }
+
+        // Add a "Upload" button to the navigation bar
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Upload", style: .plain, target: self, action: #selector(uploadButtonTapped))
     }
 
-
-    @objc func imageTapped(tapGestureRecognizer: UITapGestureRecognizer) {
-        let tappedPoint = tapGestureRecognizer.location(in: imageView)
-        erasePixel(at: tappedPoint)
-    }
-
-    func erasePixel(at point: CGPoint) {
-        guard let cgImage = originalImage?.cgImage else { return }
-        let scale = UIScreen.main.scale
-        let x = Int(point.x * scale)
-        let y = Int(point.y * scale)
-        let colorSpace = CGColorSpaceCreateDeviceRGB()
-        let bitmapInfo = CGImageAlphaInfo.premultipliedLast.rawValue
-        guard let context = CGContext(data: nil, width: cgImage.width, height: cgImage.height, bitsPerComponent: 8, bytesPerRow: cgImage.width * 4, space: colorSpace, bitmapInfo: bitmapInfo) else { return }
-        
-        context.translateBy(x: 0, y: CGFloat(cgImage.height))
-        context.scaleBy(x: 1.0, y: -1.0)
-        context.draw(cgImage, in: CGRect(x: 0, y: 0, width: cgImage.width, height: cgImage.height))
-
-        let rect = CGRect(x: x, y: y, width: 10, height: 10) // Adjust size as needed
-        context.clear(rect)
-        
-        guard let newCgImage = context.makeImage() else { return }
-        let newImage = UIImage(cgImage: newCgImage)
-        imageView.image = newImage
-        originalImage = newImage
+    @objc func uploadButtonTapped() {
+        guard let image = eraserView.currentImage else { return }
+        sendImageToServer(image: image)
     }
 
     func sendImageToServer(image: UIImage) {
@@ -80,9 +60,16 @@ class ImageEditViewController: UIViewController {
         let task = URLSession.shared.dataTask(with: url) { data, response, error in
             guard let data = data, error == nil else { return }
             DispatchQueue.main.async {
-                self.imageView.image = UIImage(data: data)
+                if let newImage = UIImage(data: data) {
+                    self.eraserView.currentImage = newImage
+                }
             }
         }
         task.resume()
+    }
+
+    // This function can be called to go back to the camera view.
+    func resetToCamera() {
+        delegate?.didRequestRetake()
     }
 }

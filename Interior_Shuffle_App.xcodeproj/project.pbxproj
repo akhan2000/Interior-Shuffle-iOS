@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		1A24697D2AF78827008CF8E3 /* EraserView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1A24697C2AF78827008CF8E3 /* EraserView.swift */; };
 		1AB099532AF70BA800D7AEC5 /* Interior_Shuffle_AppApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB099522AF70BA800D7AEC5 /* Interior_Shuffle_AppApp.swift */; };
 		1AB099552AF70BA800D7AEC5 /* ContentView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 1AB099542AF70BA800D7AEC5 /* ContentView.swift */; };
 		1AB099572AF70BAA00D7AEC5 /* rooms in Resources */ = {isa = PBXBuildFile; fileRef = 1AB099562AF70BAA00D7AEC5 /* rooms */; };
@@ -20,6 +21,7 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
+		1A24697C2AF78827008CF8E3 /* EraserView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EraserView.swift; sourceTree = "<group>"; };
 		1AB0994F2AF70BA800D7AEC5 /* Interior_Shuffle_App.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Interior_Shuffle_App.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		1AB099522AF70BA800D7AEC5 /* Interior_Shuffle_AppApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Interior_Shuffle_AppApp.swift; sourceTree = "<group>"; };
 		1AB099542AF70BA800D7AEC5 /* ContentView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentView.swift; sourceTree = "<group>"; };
@@ -88,6 +90,7 @@
 				1AB099612AF70BF200D7AEC5 /* HomeView.swift */,
 				1AB099652AF70C1100D7AEC5 /* SavedDesignsView.swift */,
 				1ACD538C2AF7620B009DF0E6 /* CanvasView.swift */,
+				1A24697C2AF78827008CF8E3 /* EraserView.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -187,6 +190,7 @@
 				1AB099552AF70BA800D7AEC5 /* ContentView.swift in Sources */,
 				1AB099662AF70C1100D7AEC5 /* SavedDesignsView.swift in Sources */,
 				1AB099532AF70BA800D7AEC5 /* Interior_Shuffle_AppApp.swift in Sources */,
+				1A24697D2AF78827008CF8E3 /* EraserView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
