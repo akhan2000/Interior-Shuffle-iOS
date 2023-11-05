@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Bucket
+   uuid = "A37F1795-9D98-4DCD-B3D6-63EA757E81F2"
+   type = "1"
+   version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            uuid = "15752F29-DC24-4565-8429-80C316F10881"
+            shouldBeEnabled = "Yes"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Interior_Shuffle_App/controllers/CameraController.swift"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "76"
+            endingLineNumber = "76"
+            landmarkName = "checkCameraAuthorization(completion:)"
+            landmarkType = "9">
+            <Locations>
+               <Location
+                  uuid = "15752F29-DC24-4565-8429-80C316F10881 - bd23545a42978a1"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Interior_Shuffle_App.checkCameraAuthorization(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
+                  moduleName = "Interior_Shuffle_App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/asfandyarkhan/Desktop/Interior-Shuffle-Xcode-Repo/Interior_Shuffle_App/Interior_Shuffle_App/controllers/CameraController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "77"
+                  endingLineNumber = "77"
+                  offsetFromSymbolStart = "548">
+               </Location>
+               <Location
+                  uuid = "15752F29-DC24-4565-8429-80C316F10881 - bd23545a4297840"
+                  shouldBeEnabled = "Yes"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Interior_Shuffle_App.checkCameraAuthorization(completion: (Swift.Bool) -&gt; ()) -&gt; ()"
+                  moduleName = "Interior_Shuffle_App"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/asfandyarkhan/Desktop/Interior-Shuffle-Xcode-Repo/Interior_Shuffle_App/Interior_Shuffle_App/controllers/CameraController.swift"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "76"
+                  endingLineNumber = "76"
+                  offsetFromSymbolStart = "548">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
+</Bucket>
