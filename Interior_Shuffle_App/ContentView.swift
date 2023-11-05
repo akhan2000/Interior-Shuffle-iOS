@@ -1,41 +1,58 @@
 import SwiftUI
 
 struct ContentView: View {
-    // State for the image captured from the camera
     @State private var capturedImage: UIImage?
     @State private var isShowingEditView = false
 
     var body: some View {
-        TabView {
-            HomeView()
-                .tabItem {
-                    Image(systemName: "house.fill")
-                    Text("Home")
-                }
-
-            CameraView(image: $capturedImage) { capturedImage in
-                            self.capturedImage = capturedImage
-                            self.isShowingEditView = true
-                        }
-                        .tabItem {
-                            Image(systemName: "camera.viewfinder")
-                            Text("Camera")
-                        }
-                        .sheet(isPresented: $isShowingEditView) {
-                                    ImageEditViewWrapper(image: $capturedImage, isShowingEditView: $isShowingEditView)  // Pass the binding here
+        NavigationView {
+            TabView {
+                HomeView()
+                    .tabItem {
+                        Image(systemName: "house.fill")
+                        Text("Home")
+                    }
+                
+                VStack {
+                    if isShowingEditView {
+                        ImageEditViewWrapper(image: $capturedImage, isShowingEditView: $isShowingEditView)
+                            .navigationBarBackButtonHidden(true)
+                            .navigationBarItems(leading:
+                                Button(action: {
+                                    withAnimation {
+                                        isShowingEditView = false
+                                    }
+                                }) {
+                                    Text("Back")
                                 }
-
-            SavedDesignsView()
-                .tabItem {
-                    Image(systemName: "heart.fill")
-                    Text("Saved")
+                            )
+                    } else {
+                        CameraView(image: $capturedImage) { capturedImage in
+                            self.capturedImage = capturedImage
+                            withAnimation {
+                                self.isShowingEditView = true
+                            }
+                        }
+                    }
                 }
+                .tabItem {
+                    Image(systemName: "camera.viewfinder")
+                    Text("Camera")
+                }
+
+                SavedDesignsView()
+                    .tabItem {
+                        Image(systemName: "heart.fill")
+                        Text("Saved")
+                    }
+            }
         }
     }
 }
+
 struct ImageEditViewWrapper: UIViewControllerRepresentable {
     @Binding var image: UIImage?
-    @Binding var isShowingEditView: Bool  // Bind to the state controlling the sheet presentation
+    @Binding var isShowingEditView: Bool
 
     func makeCoordinator() -> Coordinator {
         Coordinator(self)
@@ -49,14 +66,14 @@ struct ImageEditViewWrapper: UIViewControllerRepresentable {
         }
 
         func didRequestRetake() {
-            parent.isShowingEditView = false  // This will dismiss the sheet when the user requests a retake
+            parent.isShowingEditView = false
         }
     }
 
     func makeUIViewController(context: Context) -> ImageEditViewController {
         let imageEditViewController = ImageEditViewController()
         imageEditViewController.originalImage = self.image
-        imageEditViewController.delegate = context.coordinator  // Set the delegate
+        imageEditViewController.delegate = context.coordinator
         return imageEditViewController
     }
 
@@ -64,8 +81,6 @@ struct ImageEditViewWrapper: UIViewControllerRepresentable {
         uiViewController.originalImage = self.image
     }
 }
-
-
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {

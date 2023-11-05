@@ -1,65 +1,64 @@
+// EraserView.swift
 import UIKit
 
-class EraserView: UIView {
-    var currentPath: CGMutablePath?
-    var currentImage: UIImage?
-    var eraserLineWidth: CGFloat = 25
-    var eraserLineCap: CGLineCap = .round
-    var panRecognizer: UIPanGestureRecognizer!
+enum Shape {
+    case circle(radius: CGFloat)
+    case rectangle(width: CGFloat, height: CGFloat)
+}
 
-    // Initializer to allow setting the image at the time of view creation
+class EraserShapeLayer: CAShapeLayer {
+    var shape: Shape
+    init(shape: Shape) {
+        self.shape = shape
+        super.init()
+    }
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+}
+
+class EraserView: UIView {
+    var currentImage: UIImage? {
+        didSet {
+            setNeedsDisplay()
+        }
+    }
+    private var shapeLayers: [EraserShapeLayer] = []
+
     init(frame: CGRect, image: UIImage?) {
         self.currentImage = image
         super.init(frame: frame)
-        setupGestureRecognizers()
     }
 
     required init?(coder: NSCoder) {
         super.init(coder: coder)
-        setupGestureRecognizers()
     }
 
-    func setupGestureRecognizers() {
-        panRecognizer = UIPanGestureRecognizer(target: self, action: #selector(handlePan(_:)))
-        self.addGestureRecognizer(panRecognizer)
-    }
-
-    @objc func handlePan(_ recognizer: UIPanGestureRecognizer) {
-        let point = recognizer.location(in: self)
-        if recognizer.state == .began {
-            currentPath = CGMutablePath()
-            currentPath?.move(to: point)
-        } else if recognizer.state == .changed {
-            currentPath?.addLine(to: point)
-            erase(at: point)
-        } else if recognizer.state == .ended {
-            currentPath = nil
+    func addShape(_ shape: Shape, at location: CGPoint) {
+        let shapeLayer = EraserShapeLayer(shape: shape)
+        shapeLayer.position = location
+        switch shape {
+        case .circle(let radius):
+            shapeLayer.path = UIBezierPath(ovalIn: CGRect(x: -radius, y: -radius, width: radius * 2, height: radius * 2)).cgPath
+        case .rectangle(let width, let height):
+            shapeLayer.path = UIBezierPath(rect: CGRect(x: -width/2, y: -height/2, width: width, height: height)).cgPath
         }
+        shapeLayers.append(shapeLayer)
+        layer.addSublayer(shapeLayer)
     }
 
-    func erase(at point: CGPoint) {
-        UIGraphicsBeginImageContextWithOptions(bounds.size, false, UIScreen.main.scale)
+    func processErasure(completion: @escaping () -> Void) {
+        UIGraphicsBeginImageContextWithOptions(bounds.size, false, 0)
         defer { UIGraphicsEndImageContext() }
-        
         currentImage?.draw(in: bounds)
-        
-        guard let context = UIGraphicsGetCurrentContext() else {
-            print("Failed to get graphics context")
-            return
-        }
-        
+        guard let context = UIGraphicsGetCurrentContext() else { return }
         context.setBlendMode(.clear)
-        context.setLineWidth(eraserLineWidth)
-        context.setLineCap(eraserLineCap)
-        
-        context.beginPath()
-        if let currentPath = currentPath {
-            context.addPath(currentPath)
+        for shapeLayer in shapeLayers {
+            context.addPath(shapeLayer.path!)
+            context.drawPath(using: .fill)
         }
-        context.strokePath()
-        
         currentImage = UIGraphicsGetImageFromCurrentImageContext()
-        setNeedsDisplay()
+        completion()
     }
 
     override func draw(_ rect: CGRect) {

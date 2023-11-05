@@ -1,31 +1,48 @@
 import UIKit
 
-// Define the delegate protocol
 protocol ImageEditViewControllerDelegate: AnyObject {
     func didRequestRetake()
 }
 
 class ImageEditViewController: UIViewController {
-
+    
     var eraserView: EraserView!
     var originalImage: UIImage?
     weak var delegate: ImageEditViewControllerDelegate?
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
         eraserView = EraserView(frame: self.view.bounds, image: originalImage)
         view.addSubview(eraserView)
-
-        // Ensure the original image is loaded before assigning it to EraserView
+        
         if let originalImage = originalImage {
             eraserView.currentImage = originalImage
         }
-
-        // Add a "Upload" button to the navigation bar
-        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Upload", style: .plain, target: self, action: #selector(uploadButtonTapped))
+        
+        let addShapeButton = UIBarButtonItem(title: "Add Shape", style: .plain, target: self, action: #selector(addShapeButtonTapped))
+        let processButton = UIBarButtonItem(title: "Process", style: .plain, target: self, action: #selector(processButtonTapped))
+        let uploadButton = UIBarButtonItem(title: "Upload", style: .plain, target: self, action: #selector(uploadButtonTapped))
+        let backButton = UIBarButtonItem(title: "Back", style: .plain, target: self, action: #selector(backButtonTapped))
+        
+        navigationItem.leftBarButtonItem = backButton
+        navigationItem.rightBarButtonItems = [uploadButton, processButton, addShapeButton]
     }
-
+    
+    @objc func addShapeButtonTapped() {
+        eraserView.isDrawingMode = true
+    }
+    
+    @objc func processButtonTapped() {
+        eraserView.processErasure {
+            // Handle processing completion if needed
+        }
+    }
+    
+    @objc func backButtonTapped() {
+        resetToCamera()
+    }
+    
     @objc func uploadButtonTapped() {
         guard let image = eraserView.currentImage else { return }
         sendImageToServer(image: image)
