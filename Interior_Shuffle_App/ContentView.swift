@@ -16,16 +16,6 @@ struct ContentView: View {
                 VStack {
                     if isShowingEditView {
                         ImageEditViewWrapper(image: $capturedImage, isShowingEditView: $isShowingEditView)
-                            .navigationBarBackButtonHidden(true)
-                            .navigationBarItems(leading:
-                                Button(action: {
-                                    withAnimation {
-                                        isShowingEditView = false
-                                    }
-                                }) {
-                                    Text("Back")
-                                }
-                            )
                     } else {
                         CameraView(image: $capturedImage) { capturedImage in
                             self.capturedImage = capturedImage
@@ -39,6 +29,7 @@ struct ContentView: View {
                     Image(systemName: "camera.viewfinder")
                     Text("Camera")
                 }
+
 
                 SavedDesignsView()
                     .tabItem {
